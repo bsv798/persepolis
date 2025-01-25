@@ -475,10 +475,9 @@ class VideoFinderAddLink(AddLinkWindow):
             self.video_format_selection_comboBox.addItem('No video')
             self.audio_format_selection_comboBox.addItem('No audio')
 
-            # set first 20 characters of media_title for file name
+            # set first 128 characters of media_title for file name
             if 'title' in media_dict.keys():
-                if len(media_dict['title']) > 20:
-                    self.media_title = media_dict['title'][0:20]
+                self.media_title = media_dict['title'][0:128]
             else:
                 self.media_title = 'Video finder'
 
