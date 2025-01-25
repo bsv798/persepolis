@@ -17,6 +17,7 @@ from persepolis.scripts.osCommands import touch
 import persepolis.scripts.useful_tools
 import logging
 import os
+import sys
 
 def configure_logging():
     global logObj
@@ -50,6 +51,18 @@ def configure_logging():
     handler.setFormatter(formatter)
 
     # add the handlers to the logger
+    logObj.addHandler(handler)
+
+    # create console info handler
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setFormatter(formatter)
+    handler.addFilter(lambda record: record.levelno <= logging.INFO)
+    logObj.addHandler(handler)
+
+    # create console warn handler
+    handler = logging.StreamHandler()
+    handler.setFormatter(formatter)
+    handler.setLevel(logging.WARNING)
     logObj.addHandler(handler)
 
 
