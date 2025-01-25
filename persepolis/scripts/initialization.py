@@ -31,6 +31,8 @@ except:
 
 # initialization
 
+logger.configure_logging()
+
 # download manager config folder .
 config_folder = determineConfigFolder()
 

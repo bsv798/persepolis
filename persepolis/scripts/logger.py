@@ -13,41 +13,44 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from persepolis.scripts.useful_tools import determineConfigFolder
 from persepolis.scripts.osCommands import touch
+import persepolis.scripts.useful_tools
 import logging
 import os
 
-# config_folder
-config_folder = determineConfigFolder()
+def configure_logging():
+    global logObj
 
-# create a directory if it does not exist
-if not os.path.exists(config_folder):
-    os.makedirs(config_folder)
+    # config_folder
+    config_folder = persepolis.scripts.useful_tools.determineConfigFolder()
 
-# log file address
-log_file = os.path.join(str(config_folder), 'persepolisdm.log')
+    # create a directory if it does not exist
+    if not os.path.exists(config_folder):
+        os.makedirs(config_folder)
 
-if not os.path.isfile(log_file):
-    touch(log_file)
+    # log file address
+    log_file = os.path.join(str(config_folder), 'persepolisdm.log')
 
-# define logging object
-logObj = logging.getLogger("Persepolis")
-logObj.setLevel(logging.INFO)
+    if not os.path.isfile(log_file):
+        touch(log_file)
 
-# don't show log in console
-logObj.propagate = False
+    # define logging object
+    logObj = logging.getLogger("Persepolis")
+    logObj.setLevel(logging.INFO)
 
-# create a file handler
-handler = logging.FileHandler(log_file)
-handler.setLevel(logging.INFO)
-# create a logging format
-formatter = logging.Formatter(
-    '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-handler.setFormatter(formatter)
+    # don't show log in console
+    logObj.propagate = False
 
-# add the handlers to the logger
-logObj.addHandler(handler)
+    # create a file handler
+    handler = logging.FileHandler(log_file)
+    handler.setLevel(logging.INFO)
+    # create a logging format
+    formatter = logging.Formatter(
+        '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    handler.setFormatter(formatter)
+
+    # add the handlers to the logger
+    logObj.addHandler(handler)
 
 
 def sendToLog(text="", type="INFO"):

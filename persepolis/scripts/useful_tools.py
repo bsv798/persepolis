@@ -32,11 +32,7 @@ except:
     from PyQt5.QtCore import QThread, QProcess
     from PyQt5.QtCore import pyqtSignal as Signal
 
-try:
-    from persepolis.scripts import logger
-    logger_availability = True
-except:
-    logger_availability = False
+from persepolis.scripts import logger
 
 # find operating system
 # os_type >> Linux or Darwin(Mac osx) or Windows(Microsoft Windows) or
@@ -166,8 +162,7 @@ def freeSpace(dir):
     try:
         import psutil
     except:
-        if logger_availability:
-            logger.sendToLog("psutil in not installed!", "ERROR")
+        logger.sendToLog("psutil in not installed!", "ERROR")
 
         return None
 
@@ -177,9 +172,7 @@ def freeSpace(dir):
         return int(free_space)
 
     except Exception as e:
-        # log in to the log file
-        if logger_availability:
-            logger.sendToLog("persepolis couldn't find free space value:\n" + str(e), "ERROR")
+        logger.sendToLog("persepolis couldn't find free space value:\n" + str(e), "ERROR")
 
         return None
 
