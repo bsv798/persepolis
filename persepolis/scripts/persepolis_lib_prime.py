@@ -27,6 +27,7 @@ from persepolis.scripts.bubble import notifySend
 from persepolis.constants import VERSION
 import json
 from requests.adapters import HTTPAdapter
+from requests_file import FileAdapter
 from urllib3.util.retry import Retry
 
 
@@ -91,6 +92,10 @@ class Download():
         # define a requests session
         self.requests_session = requests.Session()
 
+        self.requests_session.mount('file://', FileAdapter())
+
+        self.is_file = isinstance(self.requests_session.get_adapter(self.link), FileAdapter)
+
         # check if user set proxy
         if self.ip:
             ip_port = '://' + str(self.ip) + ":" + str(self.port)
@@ -150,6 +155,10 @@ class Download():
         self.requests_session.mount('http://', adapter)
         self.requests_session.mount('https://', adapter)
 
+        adapter = FileAdapter()
+        self.requests_session.mount('file://', adapter)
+
+
     # get file size
     # if file size is not available, then download link is invalid
     def getFileSize(self):
@@ -157,11 +166,14 @@ class Download():
         error_message2 = None
         # find file size
         try:
-            response = self.requests_session.head(self.link, allow_redirects=True, timeout=self.timeout, verify=self.check_certificate)
+            response = self.requests_session.head(self.link, allow_redirects=True, timeout=self.timeout, verify=self.check_certificate, stream=True)
 #             response.raise_for_status()
             self.file_header = response.headers
 
             self.file_size = int(self.file_header['content-length'])
+
+            if self.is_file:
+                self.file_header['Accept-Ranges'] = 'bytes'
         except requests.exceptions.HTTPError as error:
             error_message = 'HTTP error'
             error_message2 = str(error)
@@ -500,6 +512,9 @@ class Download():
                 response = self.requests_session.get(
                     self.link, allow_redirects=True, stream=True,
                     timeout=self.timeout, verify=self.check_certificate)
+
+                if self.is_file:
+                    response.raw.seek(start)
 
                 # open the file and write the content of the html page
                 # into file.
