@@ -25,11 +25,11 @@ import sys
 import os
 
 try:
-    from PySide6.QtCore import QThread, Signal, QProcess
+    from PySide6.QtCore import QThread, Signal, QProcess, QLocale
     from PySide6.QtWidgets import QStyleFactory
 except:
     from PyQt5.QtWidgets import QStyleFactory
-    from PyQt5.QtCore import QThread, QProcess
+    from PyQt5.QtCore import QThread, QProcess, QLocale
     from PyQt5.QtCore import pyqtSignal as Signal
 
 from persepolis.scripts import logger
@@ -217,7 +217,7 @@ def returnDefaultSettings():
     move_down_selection_shortcut = "Ctrl+Down"
 
     # Persepolis default setting
-    default_setting_dict = {'locale': 'en_US', 'toolbar_icon_size': 32, 'wait-queue': [0, 0], 'awake': 'no', 'custom-font': 'no', 'column0': 'yes',
+    default_setting_dict = {'locale': QLocale().system().name(), 'toolbar_icon_size': 32, 'wait-queue': [0, 0], 'awake': 'no', 'custom-font': 'no', 'column0': 'yes',
                             'column1': 'yes', 'column2': 'yes', 'column3': 'yes', 'column4': 'yes', 'column5': 'yes', 'column6': 'yes', 'column7': 'yes',
                             'column10': 'yes', 'column11': 'yes', 'column12': 'yes', 'subfolder': 'yes', 'startup': 'no', 'show-progress': 'yes',
                             'show-menubar': 'no', 'show-sidepanel': 'yes', 'notification': 'Native notification', 'after-dialog': 'yes',

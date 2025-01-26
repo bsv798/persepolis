@@ -142,8 +142,12 @@ class PreferencesWindow(Setting_Ui):
 
         # available language
         available_language = ['en_US', 'fa_IR', 'ar', 'es_ES', 'fr_FR', 'ko', 'pl_PL', 'pt', 'ru', 'tr', 'zh_CN', 'de', 'hu', 'nl_NL', 'pt_BR', 'sv', 'tr_TR', 'zh_TW']
+        system_locale = QLocale().system()
+        self.lang_comboBox.addItem(str(system_locale.nativeLanguageName()), system_locale.name())
         for lang in available_language:
-            self.lang_comboBox.addItem(str(QLocale(lang).nativeLanguageName()), lang)
+            current_locale = QLocale(lang)
+            if system_locale.country() != current_locale.country():
+                self.lang_comboBox.addItem(str(current_locale.nativeLanguageName()), lang)
 
         current_locale = self.lang_comboBox.findData(
             str(self.persepolis_setting.value('locale')))
