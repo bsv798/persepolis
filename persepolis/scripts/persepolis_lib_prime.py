@@ -191,8 +191,8 @@ class Download():
             error_message2 = str(error)
 
         if error_message:
-            logger.sendToLog(error_message + ' - ' + error_message2, 'ERROR')
-            self.error_message = error_message
+            self.error_message = error_message + ' - ' + error_message2
+            logger.sendToLog(self.error_message, 'ERROR')
             self.file_size = None
 
         return self.file_size
