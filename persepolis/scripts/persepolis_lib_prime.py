@@ -167,7 +167,7 @@ class Download():
         # find file size
         try:
             response = self.requests_session.head(self.link, allow_redirects=True, timeout=self.timeout, verify=self.check_certificate, stream=True)
-#             response.raise_for_status()
+            response.raise_for_status()
             self.file_header = response.headers
 
             self.file_size = int(self.file_header['content-length'])
